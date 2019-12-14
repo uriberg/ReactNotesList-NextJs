@@ -2,8 +2,8 @@ import React, {Component} from 'react'
 import {observer, inject} from 'mobx-react'
 import {Todo, NotesStore} from '../stores/notesStore';
 import {NoteListItem} from "./NoteListItem";
-import {Button, Label, Input, Icon} from "semantic-ui-react";
-import Link from 'next/link';
+import {Button, Input, Icon} from "semantic-ui-react";
+
 
 interface NoteListProps {
     notesStore?: NotesStore;
@@ -26,8 +26,13 @@ export class NoteList extends Component<NoteListProps> {
         const noteToAdd = {
             name: this.props.notesStore!.currNote
         };
-        this.props.notesStore!.addNote(noteToAdd);
-        this.props.notesStore!.currNote = ''
+        if (this.props.notesStore!.notesNum == 10){
+            alert('You have reached the max number of notes');
+        }
+        else {
+            this.props.notesStore!.addNote(noteToAdd);
+            this.props.notesStore!.currNote = '';
+        }
     };
 
     handleDeleteNote = (id: string) => {
@@ -44,11 +49,12 @@ export class NoteList extends Component<NoteListProps> {
 
     render() {
         return (
-            <div>
-                <h1>Uri</h1>
-                <Label pointing="right">Enter a new note name</Label>
-                <div className="uri">
-                    <Input placeholder="Add a new Note" icon="sticky note" value={this.props.notesStore!.currNote}
+            <div className="noteList">
+                {/*<h1>Uri</h1>*/}
+                {/*<Label pointing="right">Enter a new note name</Label>*/}
+                <div className="noteInput">
+                    <Input style={{width: '80%'}} placeholder="Add a new Note" icon="sticky note"
+                           value={this.props.notesStore!.currNote}
                            onChange={this.handleNoteChange}/>
                     <Button primary onClick={this.handleAddNote} icon>
                         <Icon name="add"/>
@@ -60,12 +66,11 @@ export class NoteList extends Component<NoteListProps> {
                     <NoteListItem key={note._id} note={note} deleteNote={this.handleDeleteNote}
                                   addingTodo={this.addTodoToNote} toggleTodoCheckbox={this.handleCheckboxToggle}/>
                 ))}
-                <nav>
-                    <Link href="/confirmationMessage">
-                        <a onClick={() => this.props.notesStore!.getNotes()}>Navigate</a>
-                    </Link>
-                </nav>
                 <style jsx>{`
+                .noteList {
+                    margin: 20px 0;        
+                }
+                
         h1,
         a {
           font-family: 'Arial';
@@ -76,14 +81,22 @@ export class NoteList extends Component<NoteListProps> {
           padding: 0;
         }
         
-        .uri {
+        .noteInput {
             display: flex;
             justify-content: center;
+            margin-bottom: 20px;
         }
-
+        
+  
+        
+        
+        .ui.input{
+            width: 80%; !important
+        }
         Input {
           list-style: none;
           margin: 25px 0;
+          width: 20%;
         }
 
         a {

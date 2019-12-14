@@ -8,7 +8,7 @@ export default class NotesCheckList extends React.Component {
         return (
             <>
                 <Head>
-                    <title>Initial</title>
+                    <title>Notei</title>
                     <link
                         rel="stylesheet"
                         href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.11/semantic.min.css"

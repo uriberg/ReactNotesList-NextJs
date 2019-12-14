@@ -1,24 +1,23 @@
 import React, {Component} from 'react'
-import {observer, inject} from 'mobx-react'
-import {Todo, NotesStore} from '../stores/notesStore';
+import {Todo} from '../stores/notesStore';
 import {TodoListItem} from './TodoListItem'
-import {NoteListItem} from "./NoteListItem";
-import {Button} from "semantic-ui-react";
+import {Button, List} from "semantic-ui-react";
 
 interface TodoListProps {
     todoList: Todo [];
     noteId: string;
     addTodo: (id: string, task: Todo) => void;
     toggleTodoCheckbox: (noteId: string, todoId: string) => void;
+    addMode: boolean;
 }
 
-export class TodoList extends Component<TodoListProps>{
+export class TodoList extends Component<TodoListProps> {
     state = {
         currTodo: ''
     };
 
 
-    handleTodoChange = ({ currentTarget: { value } }: React.SyntheticEvent<HTMLInputElement>) => {
+    handleTodoChange = ({currentTarget: {value}}: React.SyntheticEvent<HTMLInputElement>) => {
         this.setState({
             currTodo: value
         });
@@ -39,18 +38,61 @@ export class TodoList extends Component<TodoListProps>{
 
     render() {
         let todoListItems = null;
-        if (this.props.todoList.length > 0){
+        if (this.props.todoList.length > 0) {
             todoListItems = this.props.todoList!.map((todo: any) => (
-                <TodoListItem key={todo!._id} todo={todo} toggleCheckbox={this.props.toggleTodoCheckbox} noteId={this.props.noteId}/>
+                <List.Item key={todo!._id}>
+                    <TodoListItem todo={todo} toggleCheckbox={this.props.toggleTodoCheckbox}
+                                  noteId={this.props.noteId}/>
+                </List.Item>
             ));
         }
 
         return (
-            <div>
-                <label>New Todo</label>
-                <input value={this.state.currTodo} onChange={this.handleTodoChange} />
-                <Button onClick={this.handleAddTodo}>Add</Button>
-                {todoListItems}
+            <div className='todoList'>
+                <List divided verticalAlign='middle' style={{marginRight: '10%'}}>
+                    {todoListItems}
+                </List>
+                {this.props.addMode ?
+                    <>
+                        <label>New Todo</label>
+                        <input value={this.state.currTodo} onChange={this.handleTodoChange}/>
+                        <Button onClick={this.handleAddTodo}>Add</Button>
+                    </>
+                    :
+                    null
+                }
+                <style jsx>{`
+              
+                
+        h1,
+        a {
+          font-family: 'Arial';
+          color: blue;
+        }
+
+        ul {
+          padding: 0;
+        }
+        
+        .uri {
+            display: flex;
+            justify-content: center;
+        }
+
+        Input {
+          list-style: none;
+          margin: 25px 0;
+        }
+
+        a {
+          text-decoration: none;
+          color: blue;
+        }
+
+        a:hover {
+          opacity: 0.6;
+        }
+      `}</style>
             </div>
         )
     }

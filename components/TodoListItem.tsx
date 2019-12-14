@@ -1,7 +1,7 @@
 import React from 'react'
 
 import {Todo} from '../stores/notesStore'
-import {Checkbox} from 'semantic-ui-react';
+import {Checkbox, List} from 'semantic-ui-react';
 
 
 interface TodoListItemProps {
@@ -10,7 +10,13 @@ interface TodoListItemProps {
     noteId: string;
 }
 
-export const TodoListItem = ({todo, toggleCheckbox, noteId}: TodoListItemProps) =>
-    <div>
-        <Checkbox label={todo.task} checked={todo.isComplete} onClick={()=> toggleCheckbox(noteId ,todo._id!)}/>
-    </div>
+export const TodoListItem = ({todo, toggleCheckbox, noteId}: TodoListItemProps) => {
+
+    return (
+    <List.Content>
+        <List.Header>
+            <Checkbox label={todo.task} checked={todo.isComplete} onClick={() => toggleCheckbox(noteId, todo._id!)}/>
+        </List.Header>
+    </List.Content>
+    );
+};
