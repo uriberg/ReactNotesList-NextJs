@@ -1,7 +1,7 @@
 import React, {Component} from 'react'
 import {Todo} from '../stores/notesStore';
 import {TodoListItem} from './TodoListItem'
-import {Button, List} from "semantic-ui-react";
+import {Button, List, Label, Icon, Form} from "semantic-ui-react";
 
 interface TodoListProps {
     todoList: Todo [];
@@ -25,15 +25,19 @@ export class TodoList extends Component<TodoListProps> {
 
 
     handleAddTodo = () => {
-        const todoToAdd = {
-            task: this.state.currTodo,
-            isComplete: false
-        };
+        if (this.state.currTodo === '') {
+            alert('you must type at least one char');
+        } else {
+            const todoToAdd = {
+                task: this.state.currTodo,
+                isComplete: false
+            };
 
-        this.props.addTodo(this.props.noteId, todoToAdd);
-        this.setState({
-            currTodo: ''
-        });
+            this.props.addTodo(this.props.noteId, todoToAdd);
+            this.setState({
+                currTodo: ''
+            });
+        }
     };
 
     render() {
@@ -54,9 +58,16 @@ export class TodoList extends Component<TodoListProps> {
                 </List>
                 {this.props.addMode ?
                     <>
-                        <label>New Todo</label>
-                        <input value={this.state.currTodo} onChange={this.handleTodoChange}/>
-                        <Button onClick={this.handleAddTodo}>Add</Button>
+                        <Form>
+                            <Form.Field>
+                                <Label pointing='below' style={{display: 'block', width: '35%'}}>Add new item</Label>
+                                <input value={this.state.currTodo} onChange={this.handleTodoChange}
+                                       style={{width: '60%'}}/>
+                                <Button onClick={this.handleAddTodo} icon style={{height: '38px'}}>
+                                    <Icon name="add"/>
+                                </Button>
+                            </Form.Field>
+                        </Form>
                     </>
                     :
                     null

@@ -23,15 +23,16 @@ export class NoteList extends Component<NoteListProps> {
     };
 
     handleAddNote = () => {
-        const noteToAdd = {
-            name: this.props.notesStore!.currNote
-        };
-        if (this.props.notesStore!.notesNum == 10){
-            alert('You have reached the max number of notes');
-        }
-        else {
-            this.props.notesStore!.addNote(noteToAdd);
-            this.props.notesStore!.currNote = '';
+        if (this.props.notesStore!.currNote !== '') {
+            const noteToAdd = {
+                name: this.props.notesStore!.currNote
+            };
+            if (this.props.notesStore!.notesNum == 10) {
+                alert('You have reached the max number of notes');
+            } else {
+                this.props.notesStore!.addNote(noteToAdd);
+                this.props.notesStore!.currNote = '';
+            }
         }
     };
 
