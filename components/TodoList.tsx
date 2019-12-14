@@ -62,37 +62,11 @@ export class TodoList extends Component<TodoListProps> {
                     null
                 }
                 <style jsx>{`
-              
-                
-        h1,
-        a {
-          font-family: 'Arial';
-          color: blue;
-        }
-
-        ul {
-          padding: 0;
-        }
-        
-        .uri {
-            display: flex;
-            justify-content: center;
-        }
-
-        Input {
-          list-style: none;
-          margin: 25px 0;
-        }
-
-        a {
-          text-decoration: none;
-          color: blue;
-        }
-
-        a:hover {
-          opacity: 0.6;
-        }
-      `}</style>
+                    Input {
+                        list-style: none;
+                        margin: 25px 0;
+                    }
+                `}</style>
             </div>
         )
     }

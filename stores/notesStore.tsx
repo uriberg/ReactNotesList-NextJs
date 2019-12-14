@@ -1,4 +1,4 @@
-import { observable, action, reaction, computed } from 'mobx';
+import { observable, action} from 'mobx';
 import axios from 'axios';
 
 
@@ -20,27 +20,15 @@ export class NotesStore {
     @observable currNote: string = '';
     @observable notesNum: number = 0;
 
-    constructor() {
-        reaction(
-            () => this.todoList.filter(todo => !todo.isComplete),
-            incompletedTasks => {
-                if (incompletedTasks.length > 5) {
-                    alert("Dude. You've got too much on your plate.")
-                }
-            }
-        )
-    }
 
-    @computed
-    get completedTasks(): number {
-        return this.todoList.filter(todo => todo.isComplete).length
-    }
 
     @action
     getNotes(){
         axios.get('http://localhost:5000/notes')
             .then(response => {
                 //console.log(response);
+                console.log('in get NOTES');
+                console.log(response.data);
                 this.notesList = response.data;
                 this.notesNum = this.notesList.length;
                 console.log(this.notesNum);
@@ -51,9 +39,6 @@ export class NotesStore {
     addNote(note: any){
         axios.post('http://localhost:5000/notes/add', note)
             .then(res => {
-                // console.log(res);
-                // console.log(res.data);
-                // console.log(res.data._id);
                 const noteToAdd = {
                     name: note.name,
                     _id: res.data._id,
@@ -70,8 +55,11 @@ export class NotesStore {
     addTodo(noteId: string, todo: Todo) {
         console.log(todo);
         axios.post('http://localhost:5000/notes/' + noteId + '/todoList/add', {noteId, todo})
-            .then(() => {
-                this.getNotes();
+            .then(note => {
+                console.log(note);
+                let changedIndex = this.notesList.findIndex(x => x._id == note.data._id);
+                this.notesList[changedIndex] = note.data;
+                //this.getNotes();
             })
             .catch(err => console.log(err));
     }
@@ -79,8 +67,10 @@ export class NotesStore {
     @action
     toggleCheckbox(noteId: string, todoId: string){
         axios.put('http://localhost:5000/notes/' + noteId + '/todoList/' + todoId)
-            .then(() =>{
-                this.getNotes();
+            .then(note =>{
+                let changedIndex = this.notesList.findIndex(x => x._id == note.data._id);
+                this.notesList[changedIndex] = note.data;
+               // this.getNotes();
             })
             .catch(err => console.log(err));
     }
@@ -96,11 +86,6 @@ export class NotesStore {
             .catch(err => console.log(err));
     }
 
-    @action
-    completeTodo(completedTodo: Todo) {
-        // @ts-ignore
-        this.todoList.find((todo: Todo) => todo === completedTodo).isComplete = true
-    }
 }
 
 //export const todoStore = new TodoStore();

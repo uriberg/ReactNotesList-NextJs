@@ -21,15 +21,6 @@ router.route('/add').post((req, res) => {
     newNote.save()
         .then(() => res.json(newNote))
         .catch(err => res.status(400).json('Error ' + err));
-    // const name = req.body.name;
-    // const creationDate = Date.parse(req.body.creationDate);
-    //
-    // const newNote = new Note({
-    //     name,
-    //     creationDate
-    // });
-    //
-
 });
 
 router.route('/:id').delete((req, res) => {
@@ -43,6 +34,7 @@ router.route('/:id/todoList/add').post((req,res) => {
         .then(note => {
             note.todoList.push(req.body.todo);
             note.save();
+            console.log(note);
             res.json(note);
         })
         .catch(err => res.status(400).json('Error ' + err));
@@ -56,7 +48,7 @@ router.route('/:noteId/todoList/:id').put((req,res) => {
                 if (String(todoList[i]._id) === req.params.id) {
                     todoList[i].isComplete = !todoList[i].isComplete;
                     note.save();
-                    res.json('toggled checkbox!');
+                    res.json(note);
                     break;
                 }
             }
